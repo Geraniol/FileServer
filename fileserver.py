@@ -21,7 +21,6 @@ def run(port=80, pwd=""):
             self.send_header("Date", time.strftime("%Y.%m.%d %H:%M:%S %z"))
             self.send_header("Server", SERVER_NAME)
 
-
         def response403(self):
             self.send_response_only(403, "Forbidden")
             self.send_server_info()
@@ -31,6 +30,17 @@ def run(port=80, pwd=""):
                 "ok": False,
                 "status_code": 403,
                 "message": "未授权访问"
+            }, ensure_ascii=False).encode("utf-8"))
+
+        def response404(self):
+            self.send_response_only(404, "Not Found")
+            self.send_server_info()
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.end_headers()
+            self.wfile.write(json.dumps({
+                "ok": False,
+                "status_code": 404,
+                "message": "找不到请求的资源"
             }, ensure_ascii=False).encode("utf-8"))
 
         def response500(self):
